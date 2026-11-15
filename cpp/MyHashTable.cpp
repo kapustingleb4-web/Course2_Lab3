@@ -2,6 +2,8 @@
 #include "Serializer.hpp"
 #include <stdexcept>
 
+using namespace std;
+
 MyHashTable::MyHashTable(int cap) : capacity(cap < 1 ? 1 : cap), size(0) {
     buckets = new Node*[capacity];
     for (int i = 0; i < capacity; ++i) buckets[i] = nullptr;
@@ -25,7 +27,7 @@ MyHashTable::~MyHashTable() {
     delete[] buckets;
 }
 
-int MyHashTable::hash(const std::string& key) const {
+int MyHashTable::hash(const string& key) const {
     unsigned long long h = 5381;
     for (unsigned char c : key) h = h * 33 + c;
     return static_cast<int>(h % capacity);
@@ -50,7 +52,7 @@ void MyHashTable::rehash() {
     delete[] old;
 }
 
-void MyHashTable::put(const std::string& key, const std::string& value) {
+void MyHashTable::put(const string& key, const string& value) {
     int idx = hash(key);
     for (Node* cur = buckets[idx]; cur; cur = cur->next)
         if (cur->key == key) { cur->value = value; return; }
@@ -59,19 +61,19 @@ void MyHashTable::put(const std::string& key, const std::string& value) {
     if (size * 4 > capacity * 3) rehash();
 }
 
-std::string MyHashTable::get(const std::string& key) const {
+string MyHashTable::get(const string& key) const {
     for (Node* cur = buckets[hash(key)]; cur; cur = cur->next)
         if (cur->key == key) return cur->value;
-    throw std::out_of_range("Key not found: " + key);
+    throw out_of_range("Key not found: " + key);
 }
 
-bool MyHashTable::contains(const std::string& key) const {
+bool MyHashTable::contains(const string& key) const {
     for (Node* cur = buckets[hash(key)]; cur; cur = cur->next)
         if (cur->key == key) return true;
     return false;
 }
 
-bool MyHashTable::remove(const std::string& key) {
+bool MyHashTable::remove(const string& key) {
     int idx = hash(key);
     Node* prev = nullptr;
     for (Node* cur = buckets[idx]; cur; prev = cur, cur = cur->next) {
@@ -87,8 +89,8 @@ bool MyHashTable::remove(const std::string& key) {
 
 int MyHashTable::getCapacity() const { return capacity; }
 
-std::vector<std::string> MyHashTable::keys() const {
-    std::vector<std::string> res;
+vector<string> MyHashTable::keys() const {
+    vector<string> res;
     for (int i = 0; i < capacity; ++i)
         for (Node* cur = buckets[i]; cur; cur = cur->next) res.push_back(cur->key);
     return res;
@@ -109,8 +111,8 @@ void MyHashTable::clear() {
     size = 0;
 }
 
-std::string MyHashTable::toString() const {
-    std::string s = "{";
+string MyHashTable::toString() const {
+    string s = "{";
     bool first = true;
     for (int i = 0; i < capacity; ++i)
         for (Node* cur = buckets[i]; cur; cur = cur->next) {
@@ -120,11 +122,11 @@ std::string MyHashTable::toString() const {
     return s + "}";
 }
 
-std::string MyHashTable::typeName() const { return "MyHashTable"; }
+string MyHashTable::typeName() const { return "MyHashTable"; }
 
 // В файл пишем пары подряд: ключ1, значение1, ключ2, значение2, ...
-static std::vector<std::string> pairs(const MyHashTable& t) {
-    std::vector<std::string> res;
+static vector<string> pairs(const MyHashTable& t) {
+    vector<string> res;
     for (auto& k : t.keys()) {
         res.push_back(k);
         res.push_back(t.get(k));
@@ -132,17 +134,17 @@ static std::vector<std::string> pairs(const MyHashTable& t) {
     return res;
 }
 
-void MyHashTable::saveBinary(const std::string& filename) const { Serializer::saveStringsBinary(filename, typeName(), pairs(*this)); }
+void MyHashTable::saveBinary(const string& filename) const { Serializer::saveStringsBinary(filename, typeName(), pairs(*this)); }
 
-void MyHashTable::loadBinary(const std::string& filename) {
+void MyHashTable::loadBinary(const string& filename) {
     auto items = Serializer::loadStringsBinary(filename, typeName());
     clear();
     for (size_t i = 0; i + 1 < items.size(); i += 2) put(items[i], items[i + 1]);
 }
 
-void MyHashTable::saveText(const std::string& filename) const { Serializer::saveStringsText(filename, typeName(), pairs(*this)); }
+void MyHashTable::saveText(const string& filename) const { Serializer::saveStringsText(filename, typeName(), pairs(*this)); }
 
-void MyHashTable::loadText(const std::string& filename) {
+void MyHashTable::loadText(const string& filename) {
     auto items = Serializer::loadStringsText(filename, typeName());
     clear();
     for (size_t i = 0; i + 1 < items.size(); i += 2) put(items[i], items[i + 1]);

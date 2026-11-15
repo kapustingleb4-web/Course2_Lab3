@@ -3,18 +3,20 @@
 #include <string>
 #include <vector>
 
+using namespace std;
+
 // Сохранение списка значений в файл.
 // Бинарный формат: "LAB3" + имя типа + количество + элементы (строка = длина + байты).
 // Текстовый формат: JSON {"type": ..., "items": [...]} (json.hpp из ЛР1).
 namespace Serializer {
-void saveStringsBinary(const std::string& filename, const std::string& type, const std::vector<std::string>& items);
-std::vector<std::string> loadStringsBinary(const std::string& filename, const std::string& type);
-void saveIntsBinary(const std::string& filename, const std::string& type, const std::vector<int>& items);
-std::vector<int> loadIntsBinary(const std::string& filename, const std::string& type);
+void saveStringsBinary(const string& filename, const string& type, const vector<string>& items);
+vector<string> loadStringsBinary(const string& filename, const string& type);
+void saveIntsBinary(const string& filename, const string& type, const vector<int>& items);
+vector<int> loadIntsBinary(const string& filename, const string& type);
 
-void saveStringsText(const std::string& filename, const std::string& type, const std::vector<std::string>& items);
-std::vector<std::string> loadStringsText(const std::string& filename, const std::string& type);
-void saveIntsText(const std::string& filename, const std::string& type, const std::vector<int>& items);
-std::vector<int> loadIntsText(const std::string& filename, const std::string& type);
+void saveStringsText(const string& filename, const string& type, const vector<string>& items);
+vector<string> loadStringsText(const string& filename, const string& type);
+void saveIntsText(const string& filename, const string& type, const vector<int>& items);
+vector<int> loadIntsText(const string& filename, const string& type);
 }
 #endif

@@ -2,6 +2,8 @@
 #include "Serializer.hpp"
 #include <algorithm>
 
+using namespace std;
+
 AVLTree::AVLTree() : root(nullptr), size(0) {}
 
 AVLTree::AVLTree(const AVLTree& other) : root(copy(other.root)), size(other.size) {}
@@ -36,7 +38,7 @@ int AVLTree::height(Node* n) { return n ? n->height : 0; }
 
 int AVLTree::getBalance(Node* n) { return height(n->left) - height(n->right); }
 
-void AVLTree::updateHeight(Node* n) { n->height = 1 + std::max(height(n->left), height(n->right)); }
+void AVLTree::updateHeight(Node* n) { n->height = 1 + max(height(n->left), height(n->right)); }
 
 AVLTree::Node* AVLTree::rightRotate(Node* y) {
     Node* x = y->left;
@@ -142,12 +144,12 @@ int AVLTree::checkBalanced(Node* n) {
     if (!n) return 0;
     int l = checkBalanced(n->left), r = checkBalanced(n->right);
     if (l < 0 || r < 0 || l - r > 1 || r - l > 1) return -1;
-    return 1 + std::max(l, r);
+    return 1 + max(l, r);
 }
 
 bool AVLTree::isBalanced() const { return checkBalanced(root) >= 0; }
 
-void AVLTree::collect(Node* n, Traversal order, std::vector<int>& out) {
+void AVLTree::collect(Node* n, Traversal order, vector<int>& out) {
     if (!n) return;
     if (order == Traversal::PreOrder) out.push_back(n->key);
     collect(n->left, order, out);
@@ -156,16 +158,16 @@ void AVLTree::collect(Node* n, Traversal order, std::vector<int>& out) {
     if (order == Traversal::PostOrder) out.push_back(n->key);
 }
 
-std::vector<int> AVLTree::traverse(Traversal order) const {
-    std::vector<int> out;
+vector<int> AVLTree::traverse(Traversal order) const {
+    vector<int> out;
     if (order != Traversal::BFS) {
         collect(root, order, out);
         return out;
     }
-    std::vector<Node*> level;  // обход в ширину по уровням
+    vector<Node*> level;  // обход в ширину по уровням
     if (root) level.push_back(root);
     while (!level.empty()) {
-        std::vector<Node*> next;
+        vector<Node*> next;
         for (Node* n : level) {
             out.push_back(n->key);
             if (n->left) next.push_back(n->left);
@@ -184,20 +186,20 @@ void AVLTree::clear() {
     size = 0;
 }
 
-std::string AVLTree::toString() const {
-    std::string s = "[";
+string AVLTree::toString() const {
+    string s = "[";
     auto v = traverse(Traversal::InOrder);
-    for (size_t i = 0; i < v.size(); ++i) s += (i ? ", " : "") + std::to_string(v[i]);
+    for (size_t i = 0; i < v.size(); ++i) s += (i ? ", " : "") + to_string(v[i]);
     return s + "]";
 }
 
-std::string AVLTree::typeName() const { return "AVLTree"; }
+string AVLTree::typeName() const { return "AVLTree"; }
 
-void AVLTree::saveBinary(const std::string& filename) const {
+void AVLTree::saveBinary(const string& filename) const {
     Serializer::saveIntsBinary(filename, typeName(), traverse(Traversal::PreOrder));
 }
 
-void AVLTree::loadBinary(const std::string& filename) {
+void AVLTree::loadBinary(const string& filename) {
     auto items = Serializer::loadIntsBinary(filename, typeName());
     clear();
     for (int k : items) {
@@ -206,11 +208,11 @@ void AVLTree::loadBinary(const std::string& filename) {
     }
 }
 
-void AVLTree::saveText(const std::string& filename) const {
+void AVLTree::saveText(const string& filename) const {
     Serializer::saveIntsText(filename, typeName(), traverse(Traversal::PreOrder));
 }
 
-void AVLTree::loadText(const std::string& filename) {
+void AVLTree::loadText(const string& filename) {
     auto items = Serializer::loadIntsText(filename, typeName());
     clear();
     for (int k : items) {

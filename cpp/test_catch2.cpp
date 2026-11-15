@@ -12,10 +12,12 @@
 #include <cstdio>
 #include <fstream>
 
+using namespace std;
+
 TEST_CASE("MyArray: добавление, вставка, получение, удаление", "[array]") {
     MyArray a;
     REQUIRE(a.isEmpty());
-    for (int i = 0; i < 10; ++i) a.push_back(std::to_string(i));
+    for (int i = 0; i < 10; ++i) a.push_back(to_string(i));
     REQUIRE(a.length() == 10);
     a.insert_at(0, "start");
     a.insert_at(a.length(), "end");
@@ -27,10 +29,10 @@ TEST_CASE("MyArray: добавление, вставка, получение, у
     REQUIRE(a.get(0) == "zero");
     REQUIRE(a.find("5") == 5);
     REQUIRE(a.find("nope") == -1);
-    REQUIRE_THROWS_AS(a.get(100), std::out_of_range);
-    REQUIRE_THROWS_AS(a.insert_at(-1, "x"), std::out_of_range);
-    REQUIRE_THROWS_AS(a.remove_at(100), std::out_of_range);
-    REQUIRE_THROWS_AS(a.update_at(100, "x"), std::out_of_range);
+    REQUIRE_THROWS_AS(a.get(100), out_of_range);
+    REQUIRE_THROWS_AS(a.insert_at(-1, "x"), out_of_range);
+    REQUIRE_THROWS_AS(a.remove_at(100), out_of_range);
+    REQUIRE_THROWS_AS(a.update_at(100, "x"), out_of_range);
     REQUIRE(a.typeName() == "MyArray");
 }
 
@@ -64,7 +66,7 @@ TEST_CASE("ForwardList: 4 способа вставки и удаления", "[
     REQUIRE(l.find("c") == 3);
     REQUIRE(l.find("zzz") == -1);
     REQUIRE(l.get(1) == "a");
-    REQUIRE_THROWS_AS(l.get(10), std::out_of_range);
+    REQUIRE_THROWS_AS(l.get(10), out_of_range);
     l.pop_front();
     l.pop_back();
     REQUIRE(l.toString() == "[a -> b -> c]");
@@ -117,7 +119,7 @@ TEST_CASE("DoublyList: вставка, удаление, чтение в обе 
     REQUIRE(l.toReverseString() == "[5 <-> 4 <-> 3 <-> 2.5 <-> 2 <-> 1 <-> 0]");
     REQUIRE(l.get(1) == "1");
     REQUIRE(l.get(5) == "4");
-    REQUIRE_THROWS_AS(l.get(-1), std::out_of_range);
+    REQUIRE_THROWS_AS(l.get(-1), out_of_range);
     REQUIRE(l.find("3") == 4);
     REQUIRE(l.find("x") == -1);
     REQUIRE(l.remove_by_value("2.5"));
@@ -167,7 +169,7 @@ TEST_CASE("MyStack и MyQueue", "[stack][queue]") {
 
 TEST_CASE("MyHashTable: put, get, remove, рехеширование", "[hash]") {
     MyHashTable t(2);
-    for (int i = 0; i < 50; ++i) t.put("k" + std::to_string(i), std::to_string(i * i));
+    for (int i = 0; i < 50; ++i) t.put("k" + to_string(i), to_string(i * i));
     REQUIRE(t.getSize() == 50);
     REQUIRE(t.getCapacity() > 50);
     REQUIRE(t.get("k7") == "49");
@@ -175,7 +177,7 @@ TEST_CASE("MyHashTable: put, get, remove, рехеширование", "[hash]")
     REQUIRE(t.get("k7") == "seven");
     REQUIRE(t.contains("k3"));
     REQUIRE_FALSE(t.contains("nope"));
-    REQUIRE_THROWS_AS(t.get("nope"), std::out_of_range);
+    REQUIRE_THROWS_AS(t.get("nope"), out_of_range);
     REQUIRE(t.remove("k3"));
     REQUIRE_FALSE(t.remove("k3"));
     REQUIRE(t.keys().size() == 49);
@@ -198,10 +200,10 @@ TEST_CASE("AVLTree: повороты, обходы, удаление", "[tree]")
     REQUIRE_FALSE(t.insert(5));
     REQUIRE(t.getSize() == 9);
     REQUIRE(t.isBalanced());
-    REQUIRE(t.traverse(Traversal::InOrder) == std::vector<int>{1, 2, 3, 4, 5, 6, 7, 8, 9});
-    REQUIRE(t.traverse(Traversal::BFS) == std::vector<int>{3, 2, 7, 1, 5, 9, 4, 6, 8});
-    REQUIRE(t.traverse(Traversal::PreOrder) == std::vector<int>{3, 2, 1, 7, 5, 4, 6, 9, 8});
-    REQUIRE(t.traverse(Traversal::PostOrder) == std::vector<int>{1, 2, 4, 6, 5, 8, 9, 7, 3});
+    REQUIRE(t.traverse(Traversal::InOrder) == vector<int>{1, 2, 3, 4, 5, 6, 7, 8, 9});
+    REQUIRE(t.traverse(Traversal::BFS) == vector<int>{3, 2, 7, 1, 5, 9, 4, 6, 8});
+    REQUIRE(t.traverse(Traversal::PreOrder) == vector<int>{3, 2, 1, 7, 5, 4, 6, 9, 8});
+    REQUIRE(t.traverse(Traversal::PostOrder) == vector<int>{1, 2, 4, 6, 5, 8, 9, 7, 3});
     REQUIRE(t.find(6));
     REQUIRE_FALSE(t.find(100));
     REQUIRE(t.remove(3));   // два ребёнка
@@ -218,10 +220,10 @@ TEST_CASE("AVLTree: повороты, обходы, удаление", "[tree]")
     // LR и RL случаи
     AVLTree lr;
     for (int v : {30, 10, 20}) lr.insert(v);
-    REQUIRE(lr.traverse(Traversal::PreOrder) == std::vector<int>{20, 10, 30});
+    REQUIRE(lr.traverse(Traversal::PreOrder) == vector<int>{20, 10, 30});
     AVLTree rl;
     for (int v : {10, 30, 20}) rl.insert(v);
-    REQUIRE(rl.traverse(Traversal::PreOrder) == std::vector<int>{20, 10, 30});
+    REQUIRE(rl.traverse(Traversal::PreOrder) == vector<int>{20, 10, 30});
     AVLTree c(t), d;
     d = t;
     d = d;
@@ -310,14 +312,14 @@ TEST_CASE("Сериализация: бинарный и текстовый фо
     REQUIRE_THROWS(a1.loadBinary("no_such_file.bin"));
     REQUIRE_THROWS(a1.loadText("no_such_file.json"));
     REQUIRE_THROWS(a1.saveBinary("/no_such_dir/x.bin"));
-    std::ofstream("t_bad.bin") << "XXXX";
+    ofstream("t_bad.bin") << "XXXX";
     REQUIRE_THROWS(a1.loadBinary("t_bad.bin"));
-    std::ofstream("t_bad.json") << "{not json";
+    ofstream("t_bad.json") << "{not json";
     REQUIRE_THROWS(a1.loadText("t_bad.json"));
-    std::ofstream("t_short.bin", std::ios::binary) << "LAB3";
+    ofstream("t_short.bin", ios::binary) << "LAB3";
     REQUIRE_THROWS(a1.loadBinary("t_short.bin"));
 
     for (auto f : {"t_arr.bin", "t_arr.json", "t_fl.bin", "t_fl.json", "t_dl.bin", "t_dl.json", "t_st.bin",
                    "t_h.bin", "t_h.json", "t_tree.bin", "t_tree.json", "t_bad.bin", "t_bad.json", "t_short.bin"})
-        std::remove(f);
+        remove(f);
 }

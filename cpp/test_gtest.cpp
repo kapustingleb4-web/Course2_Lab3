@@ -10,6 +10,8 @@
 #include "MyQueue.hpp"
 #include "MyStack.hpp"
 
+using namespace std;
+
 TEST(MyArrayTest, PushInsertGet) {
     MyArray a;
     a.push_back("a");
@@ -17,7 +19,7 @@ TEST(MyArrayTest, PushInsertGet) {
     a.insert_at(1, "b");
     EXPECT_EQ(a.toString(), "[a, b, c]");
     EXPECT_EQ(a.get(1), "b");
-    EXPECT_THROW(a.get(5), std::out_of_range);
+    EXPECT_THROW(a.get(5), out_of_range);
 }
 
 TEST(ListTest, ForwardAndDoubly) {
@@ -42,7 +44,7 @@ TEST(StackQueueTest, LifoFifo) {
     q.push("1");
     q.push("2");
     EXPECT_EQ(q.pop(), "1");
-    EXPECT_THROW(MyStack().pop(), std::runtime_error);
+    EXPECT_THROW(MyStack().pop(), runtime_error);
 }
 
 TEST(HashTableTest, PutGetRemove) {

@@ -2,6 +2,8 @@
 #include "Serializer.hpp"
 #include <stdexcept>
 
+using namespace std;
+
 DoublyList::DoublyList() : head(nullptr), tail(nullptr), size(0) {}
 
 DoublyList::DoublyList(const DoublyList& other) : head(nullptr), tail(nullptr), size(0) {
@@ -17,7 +19,7 @@ DoublyList& DoublyList::operator=(const DoublyList& other) {
 
 DoublyList::~DoublyList() { clear(); }
 
-DoublyList::Node* DoublyList::findNode(const std::string& val) const {
+DoublyList::Node* DoublyList::findNode(const string& val) const {
     for (Node* cur = head; cur; cur = cur->next)
         if (cur->data == val) return cur;
     return nullptr;
@@ -30,7 +32,7 @@ void DoublyList::unlink(Node* n) {
     size--;
 }
 
-void DoublyList::push_front(const std::string& val) {
+void DoublyList::push_front(const string& val) {
     Node* n = new Node(val);
     n->next = head;
     if (head) head->prev = n; else tail = n;
@@ -38,7 +40,7 @@ void DoublyList::push_front(const std::string& val) {
     size++;
 }
 
-void DoublyList::push_back(const std::string& val) {
+void DoublyList::push_back(const string& val) {
     Node* n = new Node(val);
     n->prev = tail;
     if (tail) tail->next = n; else head = n;
@@ -46,7 +48,7 @@ void DoublyList::push_back(const std::string& val) {
     size++;
 }
 
-bool DoublyList::insert_before(const std::string& target, const std::string& val) {
+bool DoublyList::insert_before(const string& target, const string& val) {
     Node* t = findNode(target);
     if (!t) return false;
     if (t == head) { push_front(val); return true; }
@@ -59,7 +61,7 @@ bool DoublyList::insert_before(const std::string& target, const std::string& val
     return true;
 }
 
-bool DoublyList::insert_after(const std::string& target, const std::string& val) {
+bool DoublyList::insert_after(const string& target, const string& val) {
     Node* t = findNode(target);
     if (!t) return false;
     if (t == tail) { push_back(val); return true; }
@@ -73,45 +75,45 @@ bool DoublyList::insert_after(const std::string& target, const std::string& val)
 }
 
 void DoublyList::pop_front() {
-    if (!head) throw std::runtime_error("List is empty");
+    if (!head) throw runtime_error("List is empty");
     unlink(head);
 }
 
 void DoublyList::pop_back() {
-    if (!tail) throw std::runtime_error("List is empty");
+    if (!tail) throw runtime_error("List is empty");
     unlink(tail);
 }
 
-bool DoublyList::remove_by_value(const std::string& val) {
+bool DoublyList::remove_by_value(const string& val) {
     Node* t = findNode(val);
     if (!t) return false;
     unlink(t);
     return true;
 }
 
-bool DoublyList::remove_before(const std::string& target) {
+bool DoublyList::remove_before(const string& target) {
     Node* t = findNode(target);
     if (!t || !t->prev) return false;
     unlink(t->prev);
     return true;
 }
 
-bool DoublyList::remove_after(const std::string& target) {
+bool DoublyList::remove_after(const string& target) {
     Node* t = findNode(target);
     if (!t || !t->next) return false;
     unlink(t->next);
     return true;
 }
 
-int DoublyList::find(const std::string& val) const {
+int DoublyList::find(const string& val) const {
     int i = 0;
     for (Node* cur = head; cur; cur = cur->next, ++i)
         if (cur->data == val) return i;
     return -1;
 }
 
-std::string DoublyList::get(int index) const {
-    if (index < 0 || index >= size) throw std::out_of_range("Index out of range");
+string DoublyList::get(int index) const {
+    if (index < 0 || index >= size) throw out_of_range("Index out of range");
     Node* cur;
     if (index < size / 2) {
         cur = head;
@@ -123,14 +125,14 @@ std::string DoublyList::get(int index) const {
     return cur->data;
 }
 
-std::vector<std::string> DoublyList::getData() const {
-    std::vector<std::string> res;
+vector<string> DoublyList::getData() const {
+    vector<string> res;
     for (Node* cur = head; cur; cur = cur->next) res.push_back(cur->data);
     return res;
 }
 
-std::string DoublyList::toReverseString() const {
-    std::string s = "[";
+string DoublyList::toReverseString() const {
+    string s = "[";
     for (Node* cur = tail; cur; cur = cur->prev) s += cur->data + (cur->prev ? " <-> " : "");
     return s + "]";
 }
@@ -147,25 +149,25 @@ void DoublyList::clear() {
     size = 0;
 }
 
-std::string DoublyList::toString() const {
-    std::string s = "[";
+string DoublyList::toString() const {
+    string s = "[";
     for (Node* cur = head; cur; cur = cur->next) s += cur->data + (cur->next ? " <-> " : "");
     return s + "]";
 }
 
-std::string DoublyList::typeName() const { return "DoublyList"; }
+string DoublyList::typeName() const { return "DoublyList"; }
 
-void DoublyList::saveBinary(const std::string& filename) const { Serializer::saveStringsBinary(filename, typeName(), getData()); }
+void DoublyList::saveBinary(const string& filename) const { Serializer::saveStringsBinary(filename, typeName(), getData()); }
 
-void DoublyList::loadBinary(const std::string& filename) {
+void DoublyList::loadBinary(const string& filename) {
     auto items = Serializer::loadStringsBinary(filename, typeName());
     clear();
     for (auto& s : items) push_back(s);
 }
 
-void DoublyList::saveText(const std::string& filename) const { Serializer::saveStringsText(filename, typeName(), getData()); }
+void DoublyList::saveText(const string& filename) const { Serializer::saveStringsText(filename, typeName(), getData()); }
 
-void DoublyList::loadText(const std::string& filename) {
+void DoublyList::loadText(const string& filename) {
     auto items = Serializer::loadStringsText(filename, typeName());
     clear();
     for (auto& s : items) push_back(s);

@@ -4,20 +4,22 @@
 #include <string>
 #include <vector>
 
+using namespace std;
+
 // Хеш-таблица (метод цепочек), ключ и значение - строки.
 class MyHashTable : public Container {
 private:
     struct Node {
-        std::string key;
-        std::string value;
+        string key;
+        string value;
         Node* next;
-        Node(const std::string& k, const std::string& v, Node* n) : key(k), value(v), next(n) {}
+        Node(const string& k, const string& v, Node* n) : key(k), value(v), next(n) {}
     };
     Node** buckets;
     int capacity;
     int size;
 
-    int hash(const std::string& key) const;  // djb2 + остаток от деления
+    int hash(const string& key) const;  // djb2 + остаток от деления
     void rehash();                           // удвоение при заполнении > 0.75
 
 public:
@@ -26,20 +28,20 @@ public:
     MyHashTable& operator=(const MyHashTable& other);
     ~MyHashTable() override;
 
-    void put(const std::string& key, const std::string& value);  // O(1) в среднем
-    std::string get(const std::string& key) const;               // исключение, если нет
-    bool contains(const std::string& key) const;
-    bool remove(const std::string& key);
+    void put(const string& key, const string& value);  // O(1) в среднем
+    string get(const string& key) const;               // исключение, если нет
+    bool contains(const string& key) const;
+    bool remove(const string& key);
     int getCapacity() const;
-    std::vector<std::string> keys() const;
+    vector<string> keys() const;
 
     int getSize() const override;
     void clear() override;
-    std::string toString() const override;
-    std::string typeName() const override;
-    void saveBinary(const std::string& filename) const override;
-    void loadBinary(const std::string& filename) override;
-    void saveText(const std::string& filename) const override;
-    void loadText(const std::string& filename) override;
+    string toString() const override;
+    string typeName() const override;
+    void saveBinary(const string& filename) const override;
+    void loadBinary(const string& filename) override;
+    void saveText(const string& filename) const override;
+    void loadText(const string& filename) override;
 };
 #endif

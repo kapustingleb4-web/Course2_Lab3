@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+using namespace std;
+
 enum class Traversal { InOrder, PreOrder, PostOrder, BFS };
 
 // АВЛ-дерево (вариант 2 из ЛР1): |баланс| <= 1 у каждого узла.
@@ -31,7 +33,7 @@ private:
     static Node* removeMin(Node* n, Node*& minNode);
     static Node* copy(Node* n);
     static void clear(Node* n);
-    static void collect(Node* n, Traversal order, std::vector<int>& out);
+    static void collect(Node* n, Traversal order, vector<int>& out);
     static int checkBalanced(Node* n);
 
 public:
@@ -45,16 +47,16 @@ public:
     bool find(int key) const;  // O(log n)
     int getHeight() const;
     bool isBalanced() const;
-    std::vector<int> traverse(Traversal order) const;
+    vector<int> traverse(Traversal order) const;
 
     int getSize() const override;
     void clear() override;
-    std::string toString() const override;
-    std::string typeName() const override;
+    string toString() const override;
+    string typeName() const override;
     // сохраняем прямой обход (preorder): при загрузке форма дерева восстанавливается
-    void saveBinary(const std::string& filename) const override;
-    void loadBinary(const std::string& filename) override;
-    void saveText(const std::string& filename) const override;
-    void loadText(const std::string& filename) override;
+    void saveBinary(const string& filename) const override;
+    void loadBinary(const string& filename) override;
+    void saveText(const string& filename) const override;
+    void loadText(const string& filename) override;
 };
 #endif

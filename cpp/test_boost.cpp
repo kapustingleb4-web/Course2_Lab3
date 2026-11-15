@@ -9,13 +9,15 @@
 #include "MyHashTable.hpp"
 #include "MyStack.hpp"
 
+using namespace std;
+
 BOOST_AUTO_TEST_CASE(array_basic) {
     MyArray a;
-    for (int i = 0; i < 5; ++i) a.push_back(std::to_string(i));
+    for (int i = 0; i < 5; ++i) a.push_back(to_string(i));
     a.remove_at(0);
     BOOST_CHECK_EQUAL(a.length(), 4);
     BOOST_CHECK_EQUAL(a.get(0), "1");
-    BOOST_CHECK_THROW(a.get(10), std::out_of_range);
+    BOOST_CHECK_THROW(a.get(10), out_of_range);
 }
 
 BOOST_AUTO_TEST_CASE(list_and_stack) {

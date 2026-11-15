@@ -4,20 +4,22 @@
 #include <string>
 #include <vector>
 
+using namespace std;
+
 // Двусвязный список строк: у каждого узла есть prev и next.
 class DoublyList : public Container {
 private:
     struct Node {
-        std::string data;
+        string data;
         Node* prev;
         Node* next;
-        Node(const std::string& val) : data(val), prev(nullptr), next(nullptr) {}
+        Node(const string& val) : data(val), prev(nullptr), next(nullptr) {}
     };
     Node* head;
     Node* tail;
     int size;
 
-    Node* findNode(const std::string& val) const;
+    Node* findNode(const string& val) const;
     void unlink(Node* n);  // вырезать узел - O(1)
 
 public:
@@ -26,27 +28,27 @@ public:
     DoublyList& operator=(const DoublyList& other);
     ~DoublyList() override;
 
-    void push_front(const std::string& val);                                // O(1)
-    void push_back(const std::string& val);                                 // O(1)
-    bool insert_before(const std::string& target, const std::string& val);  // O(n)
-    bool insert_after(const std::string& target, const std::string& val);   // O(n)
+    void push_front(const string& val);                                // O(1)
+    void push_back(const string& val);                                 // O(1)
+    bool insert_before(const string& target, const string& val);  // O(n)
+    bool insert_after(const string& target, const string& val);   // O(n)
     void pop_front();                                                       // O(1)
     void pop_back();                                                        // O(1)
-    bool remove_by_value(const std::string& val);                           // O(n)
-    bool remove_before(const std::string& target);                          // O(n)
-    bool remove_after(const std::string& target);                           // O(n)
-    int find(const std::string& val) const;                                 // O(n)
-    std::string get(int index) const;                                       // O(n), с ближнего конца
-    std::vector<std::string> getData() const;
-    std::string toReverseString() const;                                    // чтение назад по prev
+    bool remove_by_value(const string& val);                           // O(n)
+    bool remove_before(const string& target);                          // O(n)
+    bool remove_after(const string& target);                           // O(n)
+    int find(const string& val) const;                                 // O(n)
+    string get(int index) const;                                       // O(n), с ближнего конца
+    vector<string> getData() const;
+    string toReverseString() const;                                    // чтение назад по prev
 
     int getSize() const override;
     void clear() override;
-    std::string toString() const override;
-    std::string typeName() const override;
-    void saveBinary(const std::string& filename) const override;
-    void loadBinary(const std::string& filename) override;
-    void saveText(const std::string& filename) const override;
-    void loadText(const std::string& filename) override;
+    string toString() const override;
+    string typeName() const override;
+    void saveBinary(const string& filename) const override;
+    void loadBinary(const string& filename) override;
+    void saveText(const string& filename) const override;
+    void loadText(const string& filename) override;
 };
 #endif

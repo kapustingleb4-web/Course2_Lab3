@@ -2,13 +2,15 @@
 #define MYQUEUE_HPP
 #include "MyArray.hpp"
 
+using namespace std;
+
 // Очередь (FIFO) - наследник MyArray: добавление в конец, извлечение из начала.
 class MyQueue : public MyArray {
 public:
-    void push(const std::string& val);  // O(1) амортизированно
-    std::string pop();                  // O(n) - сдвиг массива
-    std::string front() const;          // O(1)
-    std::string toString() const override;
-    std::string typeName() const override;
+    void push(const string& val);  // O(1) амортизированно
+    string pop();                  // O(n) - сдвиг массива
+    string front() const;          // O(1)
+    string toString() const override;
+    string typeName() const override;
 };
 #endif

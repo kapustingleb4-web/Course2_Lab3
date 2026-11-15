@@ -9,6 +9,8 @@
 #include <iostream>
 #include <vector>
 
+using namespace std;
+
 int main() {
     MyArray arr;
     for (auto s : {"10", "20", "30"}) arr.push_back(s);
@@ -38,13 +40,13 @@ int main() {
     for (int v : {7, 3, 2, 1, 9, 5, 4, 6, 8}) tree.insert(v);
 
     // Полиморфизм: работаем со всеми структурами через указатель на базовый класс
-    std::vector<Container*> all = {&arr, &fl, &dl, &st, &q, &ht, &tree};
+    vector<Container*> all = {&arr, &fl, &dl, &st, &q, &ht, &tree};
     for (Container* c : all)
-        std::cout << c->typeName() << " (size " << c->getSize() << "): " << c->toString() << std::endl;
+        cout << c->typeName() << " (size " << c->getSize() << "): " << c->toString() << endl;
 
-    std::cout << "Дерево BFS: ";
-    for (int v : tree.traverse(Traversal::BFS)) std::cout << v << " ";
-    std::cout << "| высота " << tree.getHeight() << ", сбалансировано: " << (tree.isBalanced() ? "да" : "нет") << std::endl;
+    cout << "Дерево BFS: ";
+    for (int v : tree.traverse(Traversal::BFS)) cout << v << " ";
+    cout << "| высота " << tree.getHeight() << ", сбалансировано: " << (tree.isBalanced() ? "да" : "нет") << endl;
 
     // Сериализация: бинарный и текстовый формат
     tree.saveBinary("tree.bin");
@@ -53,8 +55,8 @@ int main() {
     MyHashTable ht2;
     tree2.loadBinary("tree.bin");
     ht2.loadText("table.json");
-    std::cout << "Загружено из tree.bin (BFS): ";
-    for (int v : tree2.traverse(Traversal::BFS)) std::cout << v << " ";
-    std::cout << std::endl << "Загружено из table.json: " << ht2.toString() << std::endl;
+    cout << "Загружено из tree.bin (BFS): ";
+    for (int v : tree2.traverse(Traversal::BFS)) cout << v << " ";
+    cout << endl << "Загружено из table.json: " << ht2.toString() << endl;
     return 0;
 }
