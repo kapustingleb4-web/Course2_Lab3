@@ -1,0 +1,22 @@
+# ЛР3 (Go). Запуск: make -f Makefile.txt <цель>
+demo:
+	go run ./cmd/demo
+
+test:
+	go test ./structures -v
+
+cover:
+	go test ./structures -coverprofile=coverage.out
+	go tool cover -func=coverage.out | tail -1
+	go tool cover -html=coverage.out -o coverage.html
+	@echo "HTML-отчёт: coverage.html"
+
+bench:
+	go test ./structures -run '^$$' -bench . -benchmem
+
+lint:
+	gofmt -l .
+	go vet ./...
+
+clean:
+	rm -f coverage.out coverage.html tree.json table.gob

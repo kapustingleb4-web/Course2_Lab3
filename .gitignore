@@ -1,0 +1,12 @@
+*.o
+*.data
+/cpp/dbms
+/cpp/demo
+/cpp/bench
+/cpp/test_catch2
+/cpp/test_gtest
+/cpp/test_boost
+/cpp/test_cov
+/go/dbms
+build/
+bin/

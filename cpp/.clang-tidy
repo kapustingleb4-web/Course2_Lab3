@@ -1,0 +1,10 @@
+# Линтер для C++: make -f Makefile.txt lint  (нужен пакет clang-tidy)
+Checks: >
+  bugprone-*,
+  clang-analyzer-*,
+  performance-*,
+  modernize-use-override,
+  modernize-use-nullptr,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-narrowing-conversions
+WarningsAsErrors: ''

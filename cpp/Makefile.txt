@@ -1,0 +1,45 @@
+CXX = g++
+LAB1 = ../../lab1/cpp
+CXXFLAGS = -std=c++17 -Wall -Wextra -O2 -I. -I$(LAB1)
+SRCS = MyArray.cpp MyStack.cpp MyQueue.cpp ForwardList.cpp DoublyList.cpp MyHashTable.cpp AVLTree.cpp Serializer.cpp
+
+all: demo test_catch2 bench
+
+demo: main.cpp $(SRCS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+# Основной набор тестов (catch.hpp лежит в папке, ставить ничего не нужно)
+test_catch2: test_catch2.cpp $(SRCS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+# Нужны пакеты: sudo apt install libgtest-dev libboost-test-dev
+test_gtest: test_gtest.cpp $(SRCS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ -lgtest -lgtest_main -pthread
+
+test_boost: test_boost.cpp $(SRCS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+bench: bench.cpp $(SRCS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+test: test_catch2
+	./test_catch2
+
+# Покрытие: сборка с --coverage, запуск тестов, отчёт gcov в консоль.
+# HTML-отчёт: pip install gcovr  ->  make -f Makefile.txt coverage_html
+coverage: clean_cov
+	$(CXX) -std=c++17 -O0 -g --coverage -I. -I$(LAB1) -o test_cov test_catch2.cpp $(SRCS)
+	./test_cov
+	gcov -n $(addprefix test_cov-,$(SRCS:.cpp=.gcda)) 2>/dev/null | grep -A1 "^File '[A-Z][A-Za-z]*\.cpp'" | grep -v '^--'
+
+coverage_html: coverage
+	gcovr -r . --filter '[A-Z].*\.cpp' --html-details -o coverage.html
+
+lint:
+	clang-tidy $(SRCS) -- -std=c++17 -I. -I$(LAB1)
+
+clean_cov:
+	rm -f *.gcda *.gcno *.gcov test_cov
+
+clean: clean_cov
+	rm -f demo test_catch2 test_gtest test_boost bench tree.bin table.json coverage*.html
