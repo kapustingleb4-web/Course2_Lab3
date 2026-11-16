@@ -65,7 +65,10 @@ func (q *MyQueue) Pop() (string, error) {
 		return "", ErrEmpty
 	}
 	v := q.data[0]
-	_ = q.RemoveAt(0) // O(n): сдвиг
+	q.data[0] = ""
+	q.data = q.data[1:]
+	q.size--
+	q.capacity--
 	return v, nil
 }
 
